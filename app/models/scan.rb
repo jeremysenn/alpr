@@ -25,7 +25,8 @@ class Scan < ActiveRecord::Base
   end
   
   def save_alpr_scan
-    file = open(file_url)
+    uri = URI.parse(file_url)
+    file = open(uri)
     begin
       self.results = `alpr -j #{file}`
       self.save

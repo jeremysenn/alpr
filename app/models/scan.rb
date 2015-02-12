@@ -27,14 +27,28 @@ class Scan < ActiveRecord::Base
   def save_alpr_scan
     require 'open-uri'
     
-    uri = URI.parse(file_url)
-    file = open(uri.to_s)
+    file_extension = File.extname(file_url)
+    temp_file = Tempfile.new(['', file_extension])
+    temp_file.binmode # Must be in binary mode since we're creating an image file
+    temp_file.write open(file_url).read
+    temp_file.rewind
     begin
-      self.results = `alpr -j #{file}`
+      self.results = `alpr -j #{temp_file.path}`
       self.save
-#      send_data file.read, :type => "image/jpeg", :disposition => "inline"
     ensure
-      file.close
+      temp_file.close
+      temp_file.unlink   # deletes the temp file
     end
+    
+#    uri = URI.parse(file_url)
+#    file = open(uri.to_s)
+#    begin
+#      self.results = `alpr -j #{file.path}`
+#      self.save
+##      send_data file.read, :type => "image/jpeg", :disposition => "inline"
+#    ensure
+#      file.close
+#      file.unlink   # deletes the temp file
+#    end
   end
 end

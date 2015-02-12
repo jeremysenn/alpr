@@ -13,7 +13,7 @@ class Scan < ActiveRecord::Base
   #############################
   
   def plate_number
-    results["results"].first["plate"] unless results.blank
+    results["results"].first["plate"] unless results.blank?
   end
   
   def save_alpr_scan(path_to_file)

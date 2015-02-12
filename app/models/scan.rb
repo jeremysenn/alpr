@@ -1,5 +1,9 @@
 class Scan < ActiveRecord::Base
   
+  validates :file_url, :presence => true
+  
+  after_create :save_alpr_scan
+  
   #############################
   #     Class Methods         #
   #############################
@@ -20,8 +24,14 @@ class Scan < ActiveRecord::Base
     json_results["results"].first["plate"] unless results.blank?
   end
   
-  def save_alpr_scan(path_to_file)
-    self.results = `alpr -j #{path_to_file}`
-    self.save
+  def save_alpr_scan
+    file = open(file_url)
+    begin
+      self.results = `alpr -j #{file}`
+      self.save
+#      send_data file.read, :type => "image/jpeg", :disposition => "inline"
+    ensure
+      file.close
+    end
   end
 end

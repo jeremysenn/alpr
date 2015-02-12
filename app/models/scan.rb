@@ -12,12 +12,16 @@ class Scan < ActiveRecord::Base
   #     Instance Methods      #
   #############################
   
+  def json_results
+    JSON.parse(results) unless results.blank?
+  end
+  
   def plate_number
-    results["results"].first["plate"] unless results.blank?
+    json_results["results"].first["plate"] unless results.blank?
   end
   
   def save_alpr_scan(path_to_file)
-    self.results = JSON.parse(`alpr -j #{path_to_file}`)
+    self.results = `alpr -j #{path_to_file}`
     self.save
   end
 end

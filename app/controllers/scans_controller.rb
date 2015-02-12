@@ -54,6 +54,6 @@ class ScansController < ApplicationController
     end
 
     def scan_params
-      params.require(:scan).permit(:name, :results)
+      params.require(:scan).permit(:file_url, :results)
     end
 end

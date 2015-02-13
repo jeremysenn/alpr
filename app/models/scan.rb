@@ -20,8 +20,12 @@ class Scan < ActiveRecord::Base
     JSON.parse(results) unless results.blank?
   end
   
-  def plate_number
+  def top_plate_number
     json_results["results"].first["plate"] unless results.blank?
+  end
+  
+  def candidate_plate_numbers
+    scan.json_results["results"].first["candidates"]
   end
   
   def save_alpr_scan
@@ -39,16 +43,5 @@ class Scan < ActiveRecord::Base
       temp_file.close
       temp_file.unlink   # deletes the temp file
     end
-    
-#    uri = URI.parse(file_url)
-#    file = open(uri.to_s)
-#    begin
-#      self.results = `alpr -j #{file.path}`
-#      self.save
-##      send_data file.read, :type => "image/jpeg", :disposition => "inline"
-#    ensure
-#      file.close
-#      file.unlink   # deletes the temp file
-#    end
   end
 end

@@ -25,7 +25,7 @@ class Scan < ActiveRecord::Base
   end
   
   def candidate_plate_numbers
-    scan.json_results["results"].first["candidates"]
+    json_results["results"].first["candidates"]
   end
   
   def save_alpr_scan

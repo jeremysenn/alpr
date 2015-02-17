@@ -21,11 +21,11 @@ class Scan < ActiveRecord::Base
   end
   
   def top_plate_number
-    json_results["results"].first["plate"] unless results.blank?
+    json_results["results"].first["plate"] unless json_results.blank?
   end
   
   def candidate_plate_numbers
-    json_results["results"].first["candidates"]
+    json_results["results"].first["candidates"] unless json_results.blank?
   end
   
   def save_alpr_scan

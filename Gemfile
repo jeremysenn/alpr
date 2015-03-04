@@ -15,6 +15,9 @@ gem 'sqlite3'
 
 gem 'unicorn'
 
+# Setting cron jobs
+gem 'whenever', require: false
+
 # To use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
